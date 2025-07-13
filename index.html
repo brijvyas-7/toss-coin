@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Coin Toss</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #f9fafc, #e0ecf7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            max-width: 320px;
+            width: 100%;
+            height: 357px;
+            text-align: center;
+        }
+
+        .coin-container {
+            width: 150px;
+            height: 150px;
+            margin: 1rem auto;
+            perspective: 1000px;
+        }
+
+        .coin {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background-color: gold;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backface-visibility: hidden;
+            transform-style: preserve-3d;
+            transition: transform 3s;
+        }
+
+        .flipping {
+            animation: spin 3s ease-in-out forwards;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotateX(0deg);
+            }
+
+            100% {
+                transform: rotateX(2880deg);
+            }
+
+            /* 8 full spins */
+        }
+
+        button {
+            padding: 0.6rem 1.2rem;
+            font-size: 1rem;
+            background-color: #0d6efd;
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+        }
+
+        #result-text {
+            margin-top: 1rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+            min-height: 1.5rem;
+            transition: opacity 0.3s ease;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>🪙 Toss the Coin</h1>
+        <div class="coin-container">
+            <div class="coin" id="coin">HEAD</div>
+        </div>
+        <button onclick="flip()">Toss</button>
+        <p id="result-text"></p>
+
+    </div>
+
+    <script>
+        function flip() {
+            const coin = document.getElementById('coin');
+            const resultText = document.getElementById('result-text');
+            const flipSound = document.getElementById('flip-sound'); // ✅ Get the audio element
+
+            // Clear previous result
+            resultText.textContent = '';
+            coin.textContent = '';
+            coin.classList.remove('flipping');
+            void coin.offsetWidth; // Force reflow
+
+            // ✅ Play sound
+            flipSound.currentTime = 0;
+            flipSound.play();
+
+            // Start animation
+            coin.classList.add('flipping');
+
+            // Decide result
+            const isHead = Math.random() < 0.5;
+
+            // After animation ends
+            setTimeout(() => {
+                const result = isHead ? "HEAD" : "TAIL";
+                coin.textContent = result;
+                resultText.textContent = `🪙 You Got ${result}`;
+            }, 3000);
+        }
+
+    </script>
+    <audio id="flip-sound" src="coin-flip-2.mp3" preload="auto"></audio>
+
+</body>
+
+</html>
